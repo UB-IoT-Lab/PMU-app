@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <!-- Favicon -->
+    <!--link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.ico')}}"-->
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script type="text/javascript"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Datatable -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.15/dataRender/datetime.js"></script>
+    <script>
+
+    function addPmu(pmu) {
+        //if (window.location.search !== "")
+        // window.location.search =  id ;
+        //console.log(pmu,firstId);
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('pmu', pmu);
+
+        window.location.search = urlParams;
+        //URLSearchParams(window.location.search).set('pmu' = pmu);
+        //URLSearchParams(window.location.search).set('test' = '');
+
+
+    }
+    </script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-body">
+            <!-- <form method="post">
+                <textarea class="form-control" rows="5" name="user_csv"></textarea>
+                <button class="btn btn-success mt-2">Render CSV</button>
+            </form> -->
+            <a class="btn btn-success mt-2" href="{{ url_for('root') }}">View Data</a>
+            <a class="btn btn-success mt-2" href="{{ url_for('graph') }}">Graph Data</a>
+            <a class="btn btn-success mt-2" href="{{ url_for('livetest') }}">Live Test</a>
+            
+            <div class="mt-4">
+                <div class="btn-group mb-4">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        PMU Identifier
+                    </button>
+                    <div class="dropdown-menu">
+                        {% for pmu in pmus %}
+                        <a class="dropdown-item" href='javascript:addPmu({{pmu["pmu_ident"]}});'>
+                            {{pmu["pmu_ident"]}}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <form action="/livetest" method="POST">
+                
+                    <div class="form-group">
+                        <label>status</label>
+                        <input type="text" class="form-control" id="status" name="status" placeholder="Type start to begin transmission">
+                    </div>
+                
+                    <div class="form-group">
+                        <label>message</label>
+                        <input type="text" class="form-control" id="message" name="message" placeholder="Enter 5 digit unique identifier">
+                    </div>
+                
+                    
+                
+                    <button type="submit" class="btn btn-primary">Send</button>
+                
+                </form>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $('#proxies').DataTable({
+        "ordering": false
+    });
+</script>
+
+</html>
