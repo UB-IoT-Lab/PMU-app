@@ -38,7 +38,7 @@ def root():
         print(pmu, test)
         try:
             con = sql.connect(
-                "/Users/dan/Google Drive/Assignment/SPring2022/PMU-github/Flask_docker/udp_server/db/pmu_database")
+                "db/pmu_database")
             con.row_factory = sql.Row
 
             cur = con.cursor()
@@ -95,7 +95,7 @@ def graph():
         arriv_dist = []
         try:
             con = sql.connect(
-                "/Users/dan/Google Drive/Assignment/SPring2022/PMU-github/Flask_docker/udp_server/db/pmu_database")
+                "db/pmu_database")
             con.row_factory = sql.Row
 
             cur = con.cursor()
@@ -167,7 +167,7 @@ def livetest():
         else:
             pmu = 1
         con = sql.connect(
-            "/Users/dan/Google Drive/Assignment/SPring2022/PMU-github/Flask_docker/udp_server/db/pmu_database")
+            "db/pmu_database")
         con.row_factory = sql.Row
 
         cur = con.cursor()
@@ -177,7 +177,7 @@ def livetest():
         return render_template("live_test.html", pmus=pmus)
     if request.method == 'POST':
         con = sql.connect(
-            "/Users/dan/Google Drive/Assignment/SPring2022/PMU-github/Flask_docker/udp_server/db/pmu_database")
+            "db/pmu_database")
         con.row_factory = sql.Row
 
         cur = con.cursor()
@@ -218,4 +218,4 @@ def livetest():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
