@@ -156,50 +156,33 @@ def livetest():
     devices[1] = 1673622
     devices[2] = 1662974
 
-    if request.method == 'GET':
+    # if request.method == 'GET':
 
-        if request.args:
-            if request.args.get('pmu') == None:
-                pmu = 1
-            else:
-                pmu = request.args.get('pmu')
+    #     if request.args:
+    #         if request.args.get('pmu') == None:
+    #             pmu = 1
+    #         else:
+    #             pmu = request.args.get('pmu')
 
-        else:
-            pmu = 1
-        con = sql.connect(
-            "db/pmu_database")
-        con.row_factory = sql.Row
+    #     else:
+    #         pmu = 1
+    #     con = sql.connect(
+    #         "db/pmu_database")
+    #     con.row_factory = sql.Row
 
-        cur = con.cursor()
-        pmus = cur.execute(
-            "select distinct pmu_ident from data2").fetchall()
-        con.close()
-        return render_template("live_test.html", pmus=pmus)
+    #     cur = con.cursor()
+    #     pmus = cur.execute(
+    #         "select distinct pmu_ident from data2").fetchall()
+    #     con.close()
+    #     return render_template("live_test.html", pmus=pmus)
     if request.method == 'POST':
-        con = sql.connect(
-            "db/pmu_database")
-        con.row_factory = sql.Row
 
-        cur = con.cursor()
-        pmus = cur.execute(
-            "select distinct pmu_ident from data2").fetchall()
-        con.close()
-        if request.args:
-            if request.args.get('pmu') == None:
-                pmu = 1
-            else:
-                pmu = request.args.get('pmu')
-
-        else:
-            pmu = 1
-
-        # print(devices[pmu])
-        status = request.form["status"]
-        message = request.form["message"]
-        if status == 'start':
+        if request.form.get("pmu1"):
+            status = request.form["status"]
+            message = request.form["message"]
 
             dictToSend = {
-                "deviceids": [devices[pmu]],
+                "deviceids": [devices[1]],
                 "protocol": "TCP",
                 "port": 4010,
                 "data": '{{status:"{status}",message:"{message}"}}'.format(status=status, message=message)
@@ -208,13 +191,45 @@ def livetest():
             headers = {'Authorization': 'Basic YXBpa2V5OjhvOGliT0ZrYVROaGZseXJuR3hva0RFUVdVNXJPeg==',
                        'Content-Type': 'application/json'}
             res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
-                                params={'deviceids': '1673622',
+                                params={'deviceids': devices[1],
                                         'protocol': 'TCP', 'port': '4010'},
                                 headers=headers,
                                 data=json.dumps(dictToSend))
             print(res.url)
             print(res)
-        return render_template("live_test.html", pmus=pmus)
+        if request.form.get("pmu2"):
+            status = request.form["status"]
+            message = request.form["message"]
+
+            dictToSend = {
+                "deviceids": [devices[2]],
+                "protocol": "TCP",
+                "port": 4010,
+                "data": '{{status:"{status}",message:"{message}"}}'.format(status=status, message=message)
+            }
+            print(dictToSend)
+            headers = {'Authorization': 'Basic YXBpa2V5OjhvOGliT0ZrYVROaGZseXJuR3hva0RFUVdVNXJPeg==',
+                       'Content-Type': 'application/json'}
+            res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
+                                params={'deviceids': devices[2],
+                                        'protocol': 'TCP', 'port': '4010'},
+                                headers=headers,
+                                data=json.dumps(dictToSend))
+            print(res.url)
+            print(res)
+
+        # con = sql.connect(
+        #     "db/pmu_database")
+        # con.row_factory = sql.Row
+
+        # cur = con.cursor()
+        # pmus = cur.execute(
+        #     "select distinct pmu_ident from data2").fetchall()
+        # con.close()
+
+        # print(devices[pmu])
+
+    return render_template("live_test.html")
 
 
 if __name__ == '__main__':
