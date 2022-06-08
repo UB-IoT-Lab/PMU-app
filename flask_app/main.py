@@ -154,7 +154,7 @@ def graph():
 def livetest():
     devices = {}
     devices[1] = 1673622
-    devices[2] = 5555555
+    devices[2] = 1662974
 
     if request.method == 'GET':
 
