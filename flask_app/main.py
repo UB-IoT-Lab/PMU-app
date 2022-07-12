@@ -37,8 +37,7 @@ def root():
             test = 1
         print(pmu, test)
         try:
-            con = sql.connect(
-                "db/pmu_database")
+            con = sql.connect("db/pmu_database")
             con.row_factory = sql.Row
 
             cur = con.cursor()
@@ -94,8 +93,7 @@ def graph():
         arrivdata = []
         arriv_dist = []
         try:
-            con = sql.connect(
-                "db/pmu_database")
+            con = sql.connect("db/pmu_database")
             con.row_factory = sql.Row
 
             cur = con.cursor()
@@ -155,7 +153,7 @@ def livetest():
     devices = {}
     devices[1] = 1673622
     devices[2] = 1662974
-
+    devices[3] = 1783679
     # if request.method == 'GET':
 
     #     if request.args:
@@ -217,7 +215,26 @@ def livetest():
                                 data=json.dumps(dictToSend))
             print(res.url)
             print(res)
+        if request.form.get("pmu3"):
+            status = request.form["status"]
+            message = request.form["message"]
 
+            dictToSend = {
+                "deviceids": [devices[3]],
+                "protocol": "TCP",
+                "port": 4010,
+                "data": '{{status:"{status}",message:"{message}"}}'.format(status=status, message=message)
+            }
+            print(dictToSend)
+            headers = {'Authorization': 'Basic YXBpa2V5OjhvOGliT0ZrYVROaGZseXJuR3hva0RFUVdVNXJPeg==',
+                       'Content-Type': 'application/json'}
+            res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
+                                params={'deviceids': devices[3],
+                                        'protocol': 'TCP', 'port': '4010'},
+                                headers=headers,
+                                data=json.dumps(dictToSend))
+            print(res.url)
+            print(res)
         # con = sql.connect(
         #     "db/pmu_database")
         # con.row_factory = sql.Row
@@ -230,6 +247,11 @@ def livetest():
         # print(devices[pmu])
 
     return render_template("live_test.html")
+
+
+@app.route("/issues", methods=['GET', 'POST'])
+def issues():
+    return render_template("issues.html")
 
 
 if __name__ == '__main__':
