@@ -154,6 +154,7 @@ def livetest():
     devices[1] = 1673622
     devices[2] = 1662974
     devices[3] = 1783679
+    devices[4] = 1842496
     # if request.method == 'GET':
 
     #     if request.args:
@@ -230,6 +231,26 @@ def livetest():
                        'Content-Type': 'application/json'}
             res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
                                 params={'deviceids': devices[3],
+                                        'protocol': 'TCP', 'port': '4010'},
+                                headers=headers,
+                                data=json.dumps(dictToSend))
+            print(res.url)
+            print(res)
+        if request.form.get("pmu4"):
+            status = request.form["status"]
+            message = request.form["message"]
+
+            dictToSend = {
+                "deviceids": [devices[4]],
+                "protocol": "TCP",
+                "port": 4010,
+                "data": '{{status:"{status}",message:"{message}"}}'.format(status=status, message=message)
+            }
+            print(dictToSend)
+            headers = {'Authorization': 'Basic YXBpa2V5OjhvOGliT0ZrYVROaGZseXJuR3hva0RFUVdVNXJPeg==',
+                       'Content-Type': 'application/json'}
+            res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
+                                params={'deviceids': devices[4],
                                         'protocol': 'TCP', 'port': '4010'},
                                 headers=headers,
                                 data=json.dumps(dictToSend))
