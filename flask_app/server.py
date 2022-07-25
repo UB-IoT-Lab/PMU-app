@@ -1,20 +1,20 @@
 import datetime
 import socket
 import sys
-#import pandas as pd
 import statistics
-#import ntplib
+# import pandas as pd
+# import ntplib
 import time
 import re
 
 import sqlite3
 
-conn = sqlite3.connect('db\pmu_database')
+conn = sqlite3.connect('db/pmu_database')
 c = conn.cursor()
 
 c.execute('''
           CREATE TABLE IF NOT EXISTS data2
-          ( count [INTEGER], 
+          ( count [INTEGER],
             time_stamp [INTEGER],
             arduino_min [INTEGER],
             arduino_sec [FLOAT],
@@ -27,11 +27,12 @@ c.execute('''
             pha_freq [INTEGER],
             pps [INTEGER],
             pac_seq[INTEGER],
-	    ident[INTEGER]);
+	    ident[INTEGER],
+		pmu_ident[INTEGER]);
           ''')
 
 conn.commit()
-#from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
 # Function to convert signed values to unsigned
 
@@ -51,7 +52,7 @@ def create_socket():
         global host
         global port
         global s
-        host = "0.0.0.0"#"172.31.34.212"
+        host = "0.0.0.0"
         port = 6666
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -101,8 +102,8 @@ def socket_accept():
     Packets_rec = 0
     skip = 20
     print("Listening")
-    #data,address = s.recvfrom(1024)
-    #print("Connection has been established " + " IP : " + str(address[0])+ " Port : " + str(address[1]))
+    # data,address = s.recvfrom(1024)
+    # print("Connection has been established " + " IP : " + str(address[0])+ " Port : " + str(address[1]))
     # send_command(address)
 
     try:
@@ -142,7 +143,8 @@ def socket_accept():
                 Pha = (s16(int(Packet_Data[20:24], 16)) * 180 / 31400)
                 Fre = (int(Packet_Data[24:28], 16)) / 100
                 identifier = int(Packet_Data[34:39])
-                #RCF = (int(Packet_Data[34:38], 16)) / 100
+                pmu_identifier = int(Packet_Data[39:46])
+                # RCF = (int(Packet_Data[34:38], 16)) / 100
                 Min = arduino_unix.strftime('%M')
                 Sec = int(arduino_unix.strftime('%S')) + \
                     int(Packet_Data[8:16], 16) / 1000000
@@ -152,7 +154,8 @@ def socket_accept():
                 diff = (Server_min * 60 - float(Min) * 60) + \
                     (sys_timestamp - Sec)  # Delay
                 print(diff)
-                print("identifier {}".format(identifier))
+                print("Test identifier {}".format(identifier))
+                print("PMU identifier {}".format(pmu_identifier))
                 # Rolling mean Calculation to send feedback ######################################
 
                 Delay_cal[m] = diff
@@ -167,8 +170,8 @@ def socket_accept():
                     print(Rolling_Mean)
 
                 c.execute("insert into data2 (count,time_stamp,arduino_min,arduino_sec,server_min,server_sec,diff,roll_mean,pha_mag,\
-                    pha_ang,pha_freq,pps,pac_seq,ident) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                          (count, curr_time, Min, Sec, Server_min, sys_timestamp, diff, Rolling_Mean, Mag, Pha, Fre, Rate, P_ID, identifier))
+                    pha_ang,pha_freq,pps,pac_seq,ident,pmu_ident) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                          (count, curr_time, Min, Sec, Server_min, sys_timestamp, diff, Rolling_Mean, Mag, Pha, Fre, Rate, P_ID, identifier, pmu_identifier))
 
                 conn.commit()
                 # try:
@@ -241,7 +244,7 @@ def socket_accept():
             #     except IOError as errno:
             #         print("I/O error({0})".format(errno))
 
-            #println(Sec,end=" \n")
+            # println(Sec,end=" \n")
             # print(server_time-client_response,end="")
     except socket.error as msg:
         print(msg)
@@ -266,7 +269,7 @@ def main():
     bind_socket()
 
     while True:
-        #num = input('Accept data ? ')
+        # num = input('Accept data ? ')
         # if num=='y':
         socket_accept()
         # else:
@@ -274,4 +277,4 @@ def main():
         #     break
 
 
-#main()
+main()
