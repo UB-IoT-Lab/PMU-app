@@ -6,7 +6,6 @@ ADD . /app
 
 RUN pip install --upgrade pip
 RUN apt update
-RUN apt install net-tools
 
 RUN pip install -r requirements.txt
 
