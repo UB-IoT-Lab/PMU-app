@@ -28,7 +28,8 @@
     <script type="text/javascript"
         src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.15/dataRender/datetime.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.5.22/dist/jspdf.plugin.autotable.js"></script>
     <script>
         function addTest( id ) {
             //if (window.location.search !== "")
@@ -56,6 +57,9 @@
                 
 
             }
+
+        
+        
         // if (window.location.search === "")
         //     addPmu(1)
     </script>
@@ -99,6 +103,21 @@
                         {% endfor %}
                     </div>
                 </div>
+
+                <div class="btn-group mb-4">
+                    <button type="button" class="btn btn-info" onclick="generatePDF()">
+                         Download PDF
+                    </button>
+                    
+                </div>
+
+                <div class="btn-group mb-4">
+                    <select id="pagesize" class="btn btn-info dropdown-toggle" >
+                        <option value="a2">Select pdf Size</option>
+                        <option value="letter">letter</option>
+                        
+                    </select>
+                </div>
                 
                 <table id="proxies" class="display table" style="width: 100%">
                     <thead>
@@ -137,9 +156,32 @@
     </div>
 </body>
 <script type="text/javascript">
+
+
     $('#proxies').DataTable({
-            "ordering": false
+            "ordering": false,
+            "bPaginate": false,
+            "bFilter": false, 
         });
+
+    var page = 'a2';
+    var pageSize = document.getElementById("pagesize");
+    pageSize.addEventListener("change", function () {
+        page = pageSize.value;
+    });
+        
+    function generatePDF() {
+        console.log("here");
+
+        var doc = new jsPDF('l', 'pt', page);
+
+
+        doc.autoTable({ html: '#proxies' })
+
+    
+
+        doc.save('table.pdf');
+    }
 </script>
 
 </html>
