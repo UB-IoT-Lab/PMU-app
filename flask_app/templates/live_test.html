@@ -62,7 +62,7 @@
 
                 <form action="/livetest" method="POST">
                 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>status</label>
                         <input type="text" class="form-control" id="status" name="status" placeholder="Type start to begin transmission">
                     </div>
@@ -82,12 +82,17 @@
                         <label class="form-check-label" for="pmu3"> PMU 3</label><br>
                         <input type="checkbox" class="form-check-input" id="pmu4" name="pmu4" value="4">
                         <label class="form-check-label" for="pmu4"> PMU 4</label><br>
-                    </div>
+                    </div> -->
                     
-                    <button type="submit" class="btn btn-primary">Send</button>
+                    <button type="submit" class="btn btn-info">Start</button>
                 
                 </form>
 
+            </div>
+            <div class="mt-4">
+                <form action="/livetestStop" method="POST">
+                    <button type="submit" class="btn btn-danger">Stop</button>
+                </form>
             </div>
         </div>
     </div>

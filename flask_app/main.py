@@ -1,3 +1,4 @@
+from asyncio.subprocess import PIPE
 import base64
 import io
 import json
@@ -13,7 +14,10 @@ import requests
 from dateutil import parser
 from flask import (Flask, Response, flash, jsonify, redirect, render_template,
                    request)
-
+import subprocess
+import logging
+logging.basicConfig(filename='logs/server.log', level=logging.DEBUG,
+                    format="%(asctime)s:%(levelname)s:%(message)s")
 
 #import numpy as np
 #import seaborn as sns
@@ -25,7 +29,7 @@ app = Flask(__name__)
 @app.route("/", methods=['GET', 'POST'])
 def root():
     if request.method == 'GET':
-        print("root")
+
         if request.args:
             if request.args.get('pmu') == None:
                 pmu = 1
@@ -150,123 +154,51 @@ def graph():
 
 @app.route("/livetest", methods=['GET', 'POST'])
 def livetest():
-    devices = {}
-    devices[1] = 1673622
-    devices[2] = 1662974
-    devices[3] = 1783679
-    devices[4] = 1842496
-    # if request.method == 'GET':
+    # devices = {}
+    # devices[1] = 1673622
+    # devices[2] = 1662974
+    # devices[3] = 1783679
+    # devices[4] = 1842496
 
-    #     if request.args:
-    #         if request.args.get('pmu') == None:
-    #             pmu = 1
-    #         else:
-    #             pmu = request.args.get('pmu')
-
-    #     else:
-    #         pmu = 1
-    #     con = sql.connect(
-    #         "db/pmu_database")
-    #     con.row_factory = sql.Row
-
-    #     cur = con.cursor()
-    #     pmus = cur.execute(
-    #         "select distinct pmu_ident from data2").fetchall()
-    #     con.close()
-    #     return render_template("live_test.html", pmus=pmus)
     if request.method == 'POST':
+        # status = request.form["status"]
+        # message = request.form["message"]
+        # print(status)
+        # if(status == "start"):
 
-        if request.form.get("pmu1"):
-            status = request.form["status"]
-            message = request.form["message"]
+        p1 = subprocess.Popen(
+            ["python3", "server.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-            dictToSend = {
-                "deviceids": [devices[1]],
-                "protocol": "TCP",
-                "port": 4010,
-                "data": '{{status:"{status}",message:"{message}"}}'.format(status=status, message=message)
-            }
-            print(dictToSend)
-            headers = {'Authorization': 'Basic YXBpa2V5OjhvOGliT0ZrYVROaGZseXJuR3hva0RFUVdVNXJPeg==',
-                       'Content-Type': 'application/json'}
-            res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
-                                params={'deviceids': devices[1],
-                                        'protocol': 'TCP', 'port': '4010'},
-                                headers=headers,
-                                data=json.dumps(dictToSend))
-            print(res.url)
-            print(res)
-        if request.form.get("pmu2"):
-            status = request.form["status"]
-            message = request.form["message"]
+        #  BELOW CODE IS FOR SENDING MESSAGE TO DEVICE VIA API
+        # if request.form.get("pmu4"):
+        #     status = request.form["status"]
+        #     message = request.form["message"]
 
-            dictToSend = {
-                "deviceids": [devices[2]],
-                "protocol": "TCP",
-                "port": 4010,
-                "data": '{{status:"{status}",message:"{message}"}}'.format(status=status, message=message)
-            }
-            print(dictToSend)
-            headers = {'Authorization': 'Basic YXBpa2V5OjhvOGliT0ZrYVROaGZseXJuR3hva0RFUVdVNXJPeg==',
-                       'Content-Type': 'application/json'}
-            res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
-                                params={'deviceids': devices[2],
-                                        'protocol': 'TCP', 'port': '4010'},
-                                headers=headers,
-                                data=json.dumps(dictToSend))
-            print(res.url)
-            print(res)
-        if request.form.get("pmu3"):
-            status = request.form["status"]
-            message = request.form["message"]
+        #     dictToSend = {
+        #         "deviceids": [devices[4]],
+        #         "protocol": "TCP",
+        #         "port": 4010,
+        #         "data": '{{status:"{status}",message:"{message}"}}'.format(status=status, message=message)
+        #     }
+        #     print(dictToSend)
+        #     headers = {'Authorization': 'Basic YXBpa2V5OjhvOGliT0ZrYVROaGZseXJuR3hva0RFUVdVNXJPeg==',
+        #                'Content-Type': 'application/json'}
+        #     res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
+        #                         params={'deviceids': devices[4],
+        #                                 'protocol': 'TCP', 'port': '4010'},
+        #                         headers=headers,
+        #                         data=json.dumps(dictToSend))
+        #     print(res.url)
+        #     print(res)
 
-            dictToSend = {
-                "deviceids": [devices[3]],
-                "protocol": "TCP",
-                "port": 4010,
-                "data": '{{status:"{status}",message:"{message}"}}'.format(status=status, message=message)
-            }
-            print(dictToSend)
-            headers = {'Authorization': 'Basic YXBpa2V5OjhvOGliT0ZrYVROaGZseXJuR3hva0RFUVdVNXJPeg==',
-                       'Content-Type': 'application/json'}
-            res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
-                                params={'deviceids': devices[3],
-                                        'protocol': 'TCP', 'port': '4010'},
-                                headers=headers,
-                                data=json.dumps(dictToSend))
-            print(res.url)
-            print(res)
-        if request.form.get("pmu4"):
-            status = request.form["status"]
-            message = request.form["message"]
+    return render_template("live_test.html")
 
-            dictToSend = {
-                "deviceids": [devices[4]],
-                "protocol": "TCP",
-                "port": 4010,
-                "data": '{{status:"{status}",message:"{message}"}}'.format(status=status, message=message)
-            }
-            print(dictToSend)
-            headers = {'Authorization': 'Basic YXBpa2V5OjhvOGliT0ZrYVROaGZseXJuR3hva0RFUVdVNXJPeg==',
-                       'Content-Type': 'application/json'}
-            res = requests.post('https://dashboard.hologram.io/api/1/devices/messages',
-                                params={'deviceids': devices[4],
-                                        'protocol': 'TCP', 'port': '4010'},
-                                headers=headers,
-                                data=json.dumps(dictToSend))
-            print(res.url)
-            print(res)
-        # con = sql.connect(
-        #     "db/pmu_database")
-        # con.row_factory = sql.Row
 
-        # cur = con.cursor()
-        # pmus = cur.execute(
-        #     "select distinct pmu_ident from data2").fetchall()
-        # con.close()
-
-        # print(devices[pmu])
-
+@app.route("/livetestStop", methods=['GET', 'POST'])
+def livetestStop():
+    if request.method == 'POST':
+        p2 = subprocess.run(
+            ["bash", "kill.sh"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     return render_template("live_test.html")
 
 
