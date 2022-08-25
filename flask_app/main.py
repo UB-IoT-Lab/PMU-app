@@ -168,6 +168,11 @@ def livetest():
 
         p1 = subprocess.Popen(
             ["python3", "server.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        # r1 = subprocess.run(["lsof", "-i", "UDP:7777"],
+        #                     capture_output=True)
+        #print(subprocess.check_output(['lsof', "-ti", "UDP:7777"]).decode())
+
+        # print(r1)
 
         #  BELOW CODE IS FOR SENDING MESSAGE TO DEVICE VIA API
         # if request.form.get("pmu4"):
@@ -199,6 +204,7 @@ def livetestStop():
     if request.method == 'POST':
         p2 = subprocess.run(
             ["bash", "kill.sh"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        print(p2)
     return render_template("live_test.html")
 
 
