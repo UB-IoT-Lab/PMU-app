@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start the first process
-python3 server.py &
+# python3 server.py &
   
 uwsgi app.ini &
   

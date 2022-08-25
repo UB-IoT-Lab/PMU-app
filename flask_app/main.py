@@ -167,7 +167,7 @@ def livetest():
         # if(status == "start"):
 
         p1 = subprocess.Popen(
-            ["python3", "server.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            ["python3", "server.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # r1 = subprocess.run(["lsof", "-i", "UDP:7777"],
         #                     capture_output=True)
         #print(subprocess.check_output(['lsof', "-ti", "UDP:7777"]).decode())
@@ -203,7 +203,7 @@ def livetest():
 def livetestStop():
     if request.method == 'POST':
         p2 = subprocess.run(
-            ["bash", "kill.sh"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            ["bash", "kill.sh"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(p2)
     return render_template("live_test.html")
 

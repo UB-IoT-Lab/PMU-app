@@ -1,1 +1,1 @@
-lsof -ti UDP:6666 |xargs kill -9
+lsof -ti UDP:7777 |xargs kill -9

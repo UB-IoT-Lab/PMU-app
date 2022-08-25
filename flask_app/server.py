@@ -53,7 +53,7 @@ def create_socket():
         global port
         global s
         host = "0.0.0.0"
-        port = 6666
+        port = 7777
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     except socket.error as msg:
