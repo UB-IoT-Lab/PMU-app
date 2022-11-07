@@ -1,4 +1,4 @@
-# PMU-app
+# IoT  Web Application
 The application allows you to view  LTE transmission data ( identified by test identifier ) from Iot Sensors (identified by PMU identifier ). 
 To list data in tabular form and download PDF or CSV , navigate to View Data.
 To graph data of a particular transmission , navigate to Graph Data.
