@@ -16,7 +16,7 @@ cd PMU-app
 docker-compose up --build
 
 The docker service boots up two containers, NGinx and Flask in the desired server to serve the application. 
-The port required for transmission data collection (7777) in the Flask container are mapped to the server port 7777 for UDP. NGINX runs the web server at port 80 to serve the flask application running at 8080 inside the Flask container.
+The port required for transmission data collection (7777) in the Flask container is mapped to the server port 7777 for UDP. NGINX runs the web server at port 80 to serve the flask application running at 8080 inside the Flask container.
 
 ## Application views
 
